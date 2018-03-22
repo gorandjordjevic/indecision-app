@@ -1,22 +1,57 @@
-let visibility = false;
+class VisibilityToggle extends React.Component {
 
-const toggleVisibility = () => {
-  visibility = !visibility;
-  renderForm();
-}
+  constructor(props) {
+    super(props);
 
-const renderForm = () => {
-  const template = (
+    this.state = {
+      visibility: false
+    }
+
+    this.toggleVisibility = this.toggleVisibility.bind(this);
+  }
+
+  toggleVisibility() {
+    this.setState( (prevState) => {
+      return {
+        visibility: !prevState.visibility
+      }
+    });
+  }
+
+  render() {
+    return (
     <div>
       <h1>Visibility Toggle</h1>
-      <button onClick={toggleVisibility}>
-        {visibility ? 'Hide details' : 'Show details'}
+      <button onClick={this.toggleVisibility}>
+        {this.state.visibility ? 'Hide details' : 'Show details'}
       </button>
-      {visibility && <p>Some info</p>}
+      {this.state.visibility && <p>Some info</p>}
     </div>
-  );
-  
-  ReactDOM.render(template, document.getElementById('app'));
+    );
+  }
 }
 
-renderForm();
+ReactDOM.render(<VisibilityToggle />, document.getElementById('app') );
+
+// let visibility = false;
+
+// const toggleVisibility = () => {
+//   visibility = !visibility;
+//   renderForm();
+// }
+
+// const renderForm = () => {
+//   const template = (
+//     <div>
+//       <h1>Visibility Toggle</h1>
+//       <button onClick={toggleVisibility}>
+//         {visibility ? 'Hide details' : 'Show details'}
+//       </button>
+//       {visibility && <p>Some info</p>}
+//     </div>
+//   );
+  
+//   ReactDOM.render(template, document.getElementById('app'));
+// }
+
+// renderForm();
