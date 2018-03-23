@@ -4,13 +4,35 @@ class IndecisionApp extends React.Component {
     super(props);
 
     this.state = {
-      options: props.options
+      options: []
     }
 
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
     this.handleDeleteOption = this.handleDeleteOption.bind(this);
     this.handlePick = this.handlePick.bind(this);
     this.handleAddOption = this.handleAddOption.bind(this);
+  }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('options');
+      if (json) {
+        const options = JSON.parse(json);
+        this.setState(() => ({ options }));
+      }
+    } catch (e) {
+      // Do nothing at all
+    }
+
+    // console.log('fetching data!');
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.options.length != this.state.options.length) {
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem('options', json);
+      console.log('saving data!');
+    }
   }
 
   handleDeleteOptions() {
@@ -64,10 +86,6 @@ class IndecisionApp extends React.Component {
   }
 }
 
-IndecisionApp.defaultProps = {
-  options: []
-}
-
 /**
  * Stateless | Header
  * 
@@ -112,6 +130,7 @@ const Options = (props) => {
   return (
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
+      {props.options.length === 0 && <p>Please add an option to get started</p>}
       {props.options.map((option) => (
         <Option
           key={option}
@@ -180,4 +199,4 @@ class AddOption extends React.Component {
   }
 }
 
-ReactDOM.render(<IndecisionApp options={['Devils den', 'Second District']} />, document.getElementById('app'));
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'));
